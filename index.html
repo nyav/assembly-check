@@ -102,6 +102,18 @@
     font-size:14px; color:var(--text); letter-spacing:.5px;}
   .chain .arrow{color:var(--accent); font-size:16px;}
 
+  /* 实机运行截图 */
+  .showcase{margin:26px 0;}
+  .showGrid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  .shCard{border-radius:12px; overflow:hidden; border:1px solid var(--line2); background:var(--surface);
+    box-shadow:0 14px 34px rgba(0,0,0,.35);}
+  .shCard img{width:100%; display:block;}
+  .shCap{padding:14px 17px; border-top:1px solid var(--line);}
+  .shCap .no{font-family:"Cascadia Mono", Consolas, monospace; font-size:12px; color:var(--accent); letter-spacing:1px;}
+  .shCap h4{font-size:15.5px; font-weight:700; margin:6px 0 4px; color:var(--text);}
+  .shCap p{font-size:13px; color:var(--muted); margin:0;}
+  .showNote{margin-top:18px; font-size:13.5px; color:var(--dim); letter-spacing:.3px;}
+
   /* 结语 */
   .outro{margin:52px 0 0; padding:34px 34px; border-radius:18px;
     background:radial-gradient(560px 220px at 50% 0%, rgba(34,211,238,.08), transparent 70%), var(--surface);
@@ -127,6 +139,7 @@
     .sec .body{font-size:15px;}
     pre.codeBody{font-size:12px;}
     th,td{padding:11px 12px; font-size:13px;}
+    .showGrid{grid-template-columns:1fr;}
     .brandSub{display:none;}
   }
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
@@ -236,6 +249,35 @@ class AssemblyState:
             if det.cls == 4:                  # 完成校验
                 step.verified = True
         return self._build_state(product_id)</pre>
+    </div>
+  </section>
+
+  <!-- 实机运行截图 -->
+  <section class="sec" style="margin-top:30px">
+    <div class="secHead"><span class="secNum">实机</span><h2>实机运行截图 · 四类装配动作</h2></div>
+    <div class="body">
+      <p>以下为装配检查系统在工位的<b>实机运行截图</b>（拆取自现场录屏，非效果图），展示「检查 — 装配 — 确认」各环节的实时检测判定。</p>
+    </div>
+    <div class="showcase">
+      <div class="showGrid">
+        <div class="shCard">
+          <img src="images/01_外观检查_顶端.jpg" alt="外观检查-顶端">
+          <div class="shCap"><div class="no">01 · 检查</div><h4>外观检查-顶端</h4><p>0 · 工件顶端外观状态检查</p></div>
+        </div>
+        <div class="shCard">
+          <img src="images/02_外观检查_铜体.jpg" alt="外观检查-铜体">
+          <div class="shCap"><div class="no">02 · 检查</div><h4>外观检查-铜体</h4><p>1 · 铜体外观状态检查</p></div>
+        </div>
+        <div class="shCard">
+          <img src="images/03_装白色堵头.jpg" alt="安装白色堵头">
+          <div class="shCap"><div class="no">03 · 装配</div><h4>安装白色堵头</h4><p>2 · 正在执行装堵头动作</p></div>
+        </div>
+        <div class="shCard">
+          <img src="images/04_白色堵头装配完成.jpg" alt="白色堵头装配完成">
+          <div class="shCap"><div class="no">04 · 确认</div><h4>白色堵头装配完成</h4><p>4 · 堵头已装配到位，完成校验</p></div>
+        </div>
+      </div>
+      <p class="showNote">注：类别 3「放置说明书」在本次现场录屏中未触发，为可选接入工位，故未附实机截图。</p>
     </div>
   </section>
 
