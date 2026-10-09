@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装配检查的下一站：从「检出一个动作」到「维护一个装配工序状态」</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070B14'/%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='none' stroke='%2322D3EE' stroke-width='2.5'/%3E%3Crect x='11' y='11' width='10' height='10' rx='2' fill='%2322D3EE'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#070B14; --bg2:#0A1120; --surface:#0E1830; --surface2:#13213D;
+    --primary:#3B82F6; --primaryDim:#1D3A6B; --accent:#22D3EE;
+    --success:#34D399; --warm:#FBBF24;
+    --text:#E7EEF7; --muted:#9AA9C0; --dim:#5B6B85;
+    --line:rgba(148,163,184,.16); --line2:rgba(148,163,184,.30);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Noto Sans SC", "Microsoft YaHei", -apple-system, sans-serif;
+    line-height:1.85; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* 背景：径向青色光晕 + 缓慢网格 */
+  .bgGlow{position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(1000px 520px at 82% -4%, rgba(59,130,246,.16), transparent 62%),
+      radial-gradient(900px 560px at 8% 108%, rgba(34,211,238,.07), transparent 60%);}
+  .bgGrid{position:fixed; inset:-40px; pointer-events:none; z-index:0; opacity:.35;
+    background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg,var(--line) 1px, transparent 1px);
+    background-size:78px 78px;
+    mask-image:linear-gradient(180deg,#000 0%,transparent 18%,transparent 82%,#000 100%);}
+
+  .wrap{position:relative; z-index:1; max-width:880px; margin:0 auto; padding:0 24px 90px;}
+
+  /* 顶部常驻署名条 */
+  .brand{position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px;
+    padding:14px 22px; max-width:880px; margin:0 auto;
+    background:linear-gradient(180deg, rgba(7,11,20,.96), rgba(7,11,20,.78) 60%, rgba(7,11,20,0));
+    border-bottom:1px solid rgba(34,211,238,.18);}
+  .brandBar{width:4px; height:26px; border-radius:2px; background:linear-gradient(180deg,var(--accent),rgba(34,211,238,.2));}
+  .brandName{font-weight:700; font-size:15px; letter-spacing:.3px; white-space:nowrap;}
+  .brandSep{width:5px; height:5px; border-radius:50%; background:var(--primaryDim);}
+  .brandSub{font-size:12px; color:var(--accent); letter-spacing:.5px; white-space:nowrap; opacity:.92;}
+
+  /* Hero */
+  .hero{padding:72px 0 46px; text-align:center;}
+  .kicker{display:inline-flex; align-items:center; gap:10px; padding:7px 18px; border-radius:999px;
+    border:1px solid var(--line2); background:rgba(59,130,246,.10);
+    font-size:13px; letter-spacing:4px; color:var(--accent);}
+  .hero h1{font-size:40px; line-height:1.32; margin:26px auto 0; max-width:820px; font-weight:800; letter-spacing:.5px;}
+  .hero .em{color:var(--accent);}
+  .heroSub{font-size:15px; color:var(--muted); margin-top:18px; letter-spacing:.5px;}
+  .heroMeta{display:flex; justify-content:center; gap:18px; margin-top:20px; font-size:13px; color:var(--dim); letter-spacing:1px; flex-wrap:wrap;}
+  .heroMeta b{color:var(--muted); font-weight:600;}
+
+  /* 论点横幅 */
+  .thesis{margin:14px 0 8px; padding:26px 30px; border-radius:16px;
+    background:linear-gradient(180deg, var(--surface2), var(--surface));
+    border:1px solid var(--line2); border-left:3px solid var(--accent); text-align:center;}
+  .thesis .t1{font-size:15px; color:var(--muted); letter-spacing:2px;}
+  .thesis .t2{font-size:26px; font-weight:800; margin-top:10px; line-height:1.5; color:var(--text);}
+  .thesis .t2 em{color:var(--accent); font-style:normal;}
+
+  /* 正文 */
+  .lead{font-size:17px; color:var(--text); margin:30px 0 34px;}
+  .lead p{margin:0 0 18px;}
+  .lead b, .body b{font-weight:700; color:#fff;}
+
+  .sec{margin:44px 0;}
+  .secHead{display:flex; align-items:baseline; gap:16px; margin-bottom:18px;}
+  .secNum{font-family:"Cascadia Mono", ui-monospace, Consolas, monospace; font-size:15px; color:var(--accent); letter-spacing:1px; flex-shrink:0;}
+  .secHead h2{font-size:24px; font-weight:800; letter-spacing:.5px; line-height:1.4;}
+  .sec .body{font-size:16px; color:var(--muted);}
+  .sec .body p{margin:0 0 16px;}
+  .sec .body .hl{background:linear-gradient(transparent 62%, rgba(34,211,238,.20) 62%);}
+
+  /* 代码块 */
+  .code{margin:22px 0; border-radius:12px; overflow:hidden; border:1px solid var(--line2);
+    background:#04070F; box-shadow:0 24px 60px rgba(0,0,0,.5);}
+  .codeBar{display:flex; align-items:center; gap:8px; padding:10px 18px; background:var(--surface);
+    border-bottom:1px solid var(--line); font-size:12px; color:var(--dim); letter-spacing:1px;}
+  .codeBar .dot{width:9px; height:9px; border-radius:50%;}
+  .codeBar .label{margin-left:8px; font-family:"Cascadia Mono", Consolas, monospace;}
+  pre.codeBody{margin:0; padding:18px 22px; overflow-x:auto; font-family:"Cascadia Mono", ui-monospace, Consolas, monospace;
+    font-size:13.5px; line-height:1.7; color:#C8E6E2; white-space:pre;}
+
+  /* 表格 */
+  .tableWrap{margin:22px 0; border-radius:12px; overflow:hidden; border:1px solid var(--line2);}
+  table{width:100%; border-collapse:collapse; table-layout:fixed; background:var(--surface);}
+  colgroup col:nth-child(1){width:9%;} colgroup col:nth-child(2){width:26%;}
+  colgroup col:nth-child(3){width:16%;} colgroup col:nth-child(4){width:49%;}
+  th,td{padding:13px 16px; text-align:left; font-size:14px; border-bottom:1px solid var(--line);}
+  thead th{font-weight:700; color:var(--text); background:var(--surface2); letter-spacing:.5px; font-size:13px;}
+  td{color:var(--muted); vertical-align:top;}
+  td .mono{font-family:"Cascadia Mono", Consolas, monospace; color:var(--accent); font-size:13px;}
+  tbody tr:last-child td{border-bottom:none;}
+
+  /* 时序链 */
+  .chain{margin:22px 0; display:flex; flex-wrap:wrap; align-items:center; gap:8px; justify-content:center;}
+  .chain .step{padding:10px 18px; border-radius:10px; background:var(--surface); border:1px solid var(--line2);
+    font-size:14px; color:var(--text); letter-spacing:.5px;}
+  .chain .arrow{color:var(--accent); font-size:16px;}
+
+  /* 结语 */
+  .outro{margin:52px 0 0; padding:34px 34px; border-radius:18px;
+    background:radial-gradient(560px 220px at 50% 0%, rgba(34,211,238,.08), transparent 70%), var(--surface);
+    border:1px solid var(--line2);}
+  .outro h2{font-size:22px; font-weight:800; letter-spacing:.5px; margin-bottom:16px;}
+  .outro .list{margin:0 0 6px; padding-left:2px;}
+  .outro .list li{font-size:15px; color:var(--muted); margin:10px 0; list-style:none; padding-left:26px; position:relative;}
+  .outro .list li::before{content:""; position:absolute; left:0; top:11px; width:10px; height:10px; border-radius:3px; background:var(--accent);}
+  .outro .golden{margin-top:24px; padding:20px 24px; border-radius:12px; text-align:center;
+    font-size:17px; font-weight:700; color:var(--accent); line-height:1.7;
+    border:1px solid var(--accent); background:rgba(34,211,238,.06);}
+
+  /* 底部署名 */
+  .foot{margin:56px auto 0; text-align:center; padding-top:26px; border-top:1px solid var(--line);}
+  .foot .brand2{font-weight:700; color:var(--text); letter-spacing:.5px;}
+  .foot .spec{margin-top:12px; font-size:13px; color:var(--dim); letter-spacing:.5px; line-height:2;}
+
+  @media (max-width:640px){
+    .hero{padding:52px 0 34px;}
+    .hero h1{font-size:29px;}
+    .thesis .t2{font-size:21px;}
+    .secHead h2{font-size:20px;}
+    .sec .body{font-size:15px;}
+    pre.codeBody{font-size:12px;}
+    th,td{padding:11px 12px; font-size:13px;}
+    .brandSub{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+<div class="bgGlow"></div><div class="bgGrid"></div>
+
+<!-- 顶部常驻署名条 -->
+<div class="brand">
+  <div class="brandBar"></div>
+  <span class="brandName">凝逸Ai《装配检查系统 YOLOv26n》</span>
+  <span class="brandSep"></span>
+  <span class="brandSub">YOLOv26n · 端到端无 NMS</span>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">技术长文 · 装配质检</span>
+    <h1>装配检查的下一站：<br>从「<span class="em">检出一个动作</span>」到「<span class="em">维护一个装配工序状态</span>」</h1>
+    <p class="heroSub">原创 · 凝逸 Ai · 装配检查系统 YOLOv26n</p>
+    <div class="heroMeta">
+      <span>5 类装配动作</span><span>·</span><span>25 FPS</span><span>·</span><span>2.4M 参数</span><span>·</span><span>端到端无 NMS</span>
+    </div>
+  </header>
+
+  <section class="thesis">
+    <p class="t1">一句话定位</p>
+    <p class="t2">装配质检的进化，不是某个模型跑多快，而是<em>从「检出一个动作」走向「维护一份装配工序状态」</em></p>
+  </section>
+
+  <div class="lead">
+    <p>做装配质检的朋友，可能都经历过这样一个阶段：拿到一个 YOLO 模型，训练，部署，检测框出来了，动作识别出来了，任务完成了。</p>
+    <p>但如果你正在做外观检查、堵头装配、说明书放置这类需要「持续判断工序是否到位」的项目，你会发现——<b>一个动作检测框，越来越不够用了</b>。</p>
+    <p>装配质检的重点，正在从「某个模型能识别多少类动作」，转向「系统能不能持续维护一份一致、足够新的装配工序状态」。YOLO 仍然重要，但它不该独自承担外观判定、装配动作、完成校验和质量追溯的全部任务。</p>
+    <p>这不是 YOLO 不行了。恰恰相反，YOLO——尤其是 YOLOv26n——仍然是工业端侧装配检测最常用、最有效的一类工具。但当装配检查的任务从「这个工位正在做什么」变成「这件产品走完了几道工序、堵头是否装到位、顶端铜体外观是否合格、每一道是否留痕可追溯」时，一个检测框已经不足以支撑后续的质量决策。</p>
+    <p>2026 年，装配质检正在经历一场从「跑一个模型」到「维护一个状态」的范式转移。这场转移的背后，是检测、时序与过程留痕开始协作——而 YOLOv26n 的路线图，恰好为这场转移提供了关键的技术底座。</p>
+  </div>
+
+  <!-- 01 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">01</span><h2>装配检查的一个检测框，为什么开始不够用了？</h2></div>
+    <div class="body">
+      <p>装配质检的核心任务，长期以来被定义为「识别画面里的装配动作」。</p>
+      <p>YOLO 能回答两个问题：<b>画面里正在发生什么装配动作，以及它大致在哪里</b>。对于固定工位、固定工序、固定相机的装配检查，这已经足够。</p>
+      <p>但今天的高端装配质检面临的是更复杂的连续质量管控任务。识别到「正在装白色堵头」之后，系统还要知道：这件产品的外观检查是否已经通过，堵头是否最终装配到位，是否完成了「外观检查 → 铜体检查 → 装堵头 → 完成校验」的完整工序，每一道判定是否有时间戳可以回溯。</p>
+      <p>这些问题，分别需要<b>工序时序信息、状态确认信息和过程留痕信息</b>。</p>
+      <p>以堵头装配为例：单一检测模型可以输出「正在装堵头」的动作框，但系统需要维护的不只是一个动作框，而是一个<b class="hl">装配工序状态条目</b>：工序 ID、动作类别、置信度、判定时间戳、完成校验状态。它可以随流水节拍持续更新，也可以在不同工位间传递。这个状态，才是质量工程师和 MES 系统真正可以消费的输入。</p>
+    </div>
+    <div class="code">
+      <div class="codeBar"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#FBBF24"></span><span class="dot" style="background:#34D399"></span><span class="label">装配工序状态管理</span></div>
+<pre class="codeBody">class AssemblyStep:
+    """装配工序状态条目——逐帧识别后的统一输出"""
+    def __init__(self, step_id, category, bbox, confidence):
+        self.step_id = step_id            # 工序序号
+        self.category = category          # YOLO 检测类别
+        self.bbox_2d = bbox               # 动作/目标框
+        self.confidence = confidence      # 置信度
+        self.timestamp = now()            # 该工序判定时间戳
+        self.verified = False             # 是否通过完成校验
+
+class AssemblyState:
+    """装配工序状态——维护统一、可追溯的产品装配状态"""
+    def __init__(self, product_id):
+        self.product_id = product_id
+        self.steps = {}                   # step_id -&gt; AssemblyStep
+        self.pass_fail = "IN_PROGRESS"    # 整件装配判定</pre>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">02</span><h2>五类装配动作，不是重复，而是在维护装配状态</h2></div>
+    <div class="body">
+      <p><b>装配检查的多类识别，不是把五份检测结果摆在一起，而是让不同类别回答不同问题</b>。</p>
+      <p>在这个场景里，模型对单一工位画面同时输出 5 类目标，覆盖「检查 — 装配 — 确认」三个环节：</p>
+    </div>
+    <div class="tableWrap">
+      <table>
+        <colgroup><col><col><col><col></colgroup>
+        <thead><tr><th>类别</th><th>名称</th><th>环节</th><th>回答的问题</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">0</td><td>外观检查-顶端</td><td>检查</td><td>工件顶端外观是否合格</td></tr>
+          <tr><td class="mono">1</td><td>外观检查-铜体</td><td>检查</td><td>铜体外观是否合格</td></tr>
+          <tr><td class="mono">2</td><td>安装白色堵头</td><td>装配</td><td>正在执行装堵头动作</td></tr>
+          <tr><td class="mono">3</td><td>放置说明书</td><td>装配</td><td>正在放入说明书工序</td></tr>
+          <tr><td class="mono">4</td><td>白色堵头装配完成</td><td>确认</td><td>堵头已装配到位，完成校验</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="body">
+      <p>注意，这 5 类不是并列堆叠：<b>0、1 是外观检查（决定能不能装），2 是装配动作（正在装），4 是完成校验（决定是否通过）</b>。它们组合在一起，才构成一条完整的工序闭环。</p>
+    </div>
+    <div class="code">
+      <div class="codeBar"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#FBBF24"></span><span class="dot" style="background:#34D399"></span><span class="label">装配状态协同</span></div>
+<pre class="codeBody">class AssemblyPipeline:
+    """装配检查协同流水线——让不同类别回答不同问题"""
+    def __init__(self):
+        self.detector = YOLO("yolo26n.pt")   # 检测：正在发生什么
+
+    def process_frame(self, frame, product_id):
+        dets = self.detector(frame, conf=0.25)
+        for det in dets:
+            step = AssemblyStep(det.cls, det.bbox, det.conf)
+            state.steps[step.step_id] = step
+            if det.cls == 4:                  # 完成校验
+                step.verified = True
+        return self._build_state(product_id)</pre>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">03</span><h2>关键不是每个动作都盯，而是按产线节拍维护状态</h2></div>
+    <div class="body">
+      <p>不同动作没有必要同频处理。</p>
+      <p><b>外观检查（0/1）</b> 持续逐帧运行，跟上产线节拍；<b>装配动作（2）</b> 在动作发生窗口持续识别；<b>完成校验（4）</b> 作为工序完成的确认信号，驱动状态机推进。</p>
+      <p>从实际检测序列可以看到，模型在单工位上按工艺顺序连续输出判定，典型节奏为：</p>
+    </div>
+    <div class="chain">
+      <span class="step">外观检查-顶端</span><span class="arrow">→</span>
+      <span class="step">外观检查-铜体</span><span class="arrow">→</span>
+      <span class="step">安装白色堵头</span><span class="arrow">→</span>
+      <span class="step">白色堵头装配完成</span>
+    </div>
+    <div class="body">
+      <p>即<b>先完成顶端与铜体的外观检查，再进入白色堵头装配阶段，最后以「白色堵头装配完成」作为该工序的完成确认信号</b>。多轮循环表明该逻辑在连续流水节拍中稳定复现，可作为工序完成度的自动判据。</p>
+    </div>
+    <div class="code">
+      <div class="codeBar"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#FBBF24"></span><span class="dot" style="background:#34D399"></span><span class="label">按节拍推进的状态机</span></div>
+<pre class="codeBody">class AssemblyStateMachine:
+    """装配状态机——按检测时序推进工序状态"""
+    def __init__(self):
+        self.sequence = [0, 1, 2, 4]   # 外观检查-顶端→铜体→装堵头→完成
+        self.cursor = 0
+    def on_detect(self, cls):
+        if cls == self.sequence[self.cursor]:
+            self.cursor += 1
+        if cls == 4 and self.cursor &gt;= len(self.sequence):
+            return "PASS"   # 完整工序通过
+        return "IN_PROGRESS"</pre>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">04</span><h2>端到端无 NMS 的真正价值：延迟变成「确定性」的</h2></div>
+    <div class="body">
+      <p>模型数量增加后，瓶颈很容易从算力转到数据路径与延迟波动。YOLOv26n 在工业装配质检中的优势正在于此——<b>端到端无 NMS 推理</b>和<b>移除 DFL 模块</b>，使模型导出更干净，ONNX / TensorRT 等平台一键导出无障碍。</p>
+      <p>装配质检里，<b>每一类动作的判定是否稳定，直接对应产线的漏检率（escape rate）</b>——漏检的堵头未装到位，将流向下一道工序。</p>
+      <p>YOLOv26n 的关键特性：默认一对一检测头，输入图像直接输出结果，推理链路去掉 NMS 后处理；输出定长张量 <span class="mono">(N, 300, 6)</span>，下游可直接消费；推理时间不再随目标密度/场景复杂度抖动——对卡产线节拍的质检，"不抖动"比"偶尔更快"重要得多。</p>
+      <p>这解释了工业质检领域的一个关键趋势：<b>不是模型跑多快，而是系统能不能持续输出一致、确定的判定</b>。检测模型提供速度和确定性，才能支撑后续的状态维护与留痕。</p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">05</span><h2>帧级留痕的价值，是交叉验证而不是简单叠加</h2></div>
+    <div class="body">
+      <p>单帧难免在边界条件下出错。检测分数中等时，若该工序在时序上与前后的动作一致、状态机推进顺畅、历史批次同一工序的记录一致，系统对本次判定的信任可以提高；反过来，如果动作跳变、时序错乱、轨迹无法关联，就应降低可信度或要求重新观察。</p>
+      <p>这种融合不是把几个 confidence 取平均。它要同时考虑<b>时序一致性、状态连续性和过程可追溯性</b>。</p>
+      <p>在装配质检场景中，一道工序如果连续在多件产品上重复出现且形态一致，系统可以给出「该装配动作稳定」的结论；如果某件产品动作缺失或校验失败，则标记为异常件。<b>每条判定都应该带有时间戳，避免用第 100 帧的检测去维护第 98 帧的状态</b>。</p>
+    </div>
+    <div class="code">
+      <div class="codeBar"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#FBBF24"></span><span class="dot" style="background:#34D399"></span><span class="label">装配状态交叉验证</span></div>
+<pre class="codeBody">class AssemblyFusionEngine:
+    """装配状态融合——不是取平均，而是验证一致性"""
+    def fuse(self, state, frame_id):
+        # 条件1：时序一致性——工序按序推进
+        if state.sequence_ok():
+            conf_bonus = 1.1
+        # 条件2：状态连续性——完成校验在装配动作之后
+        if state.verified and state.last_action == 2:
+            conf_bonus *= 1.2
+        # 时间戳一致性——确保所有判定来自同一工件
+        assert state.timestamp == current_product.timestamp
+        return min(conf_bonus, 1.0)</pre>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <div class="secHead"><span class="secNum">06</span><h2>从「检出动作」到「维护状态」：装配质检的演进方向</h2></div>
+    <div class="body">
+      <p>2026 年的装配质检系统，正在从单一检测模型走向状态维护架构。</p>
+      <p>YOLO 仍然是装配检测的核心，但它正在从「唯一的模型」变成「状态系统中的一员」。未来的装配质检系统，不是某个模型识别多少类动作，而是<b>检测、时序与过程留痕开始协作，共同维护一个一致的装配工序状态</b>。</p>
+      <p><b>最终形态：由状态机维护统一的装配状态</b>——外观检查（0/1）决定能不能装；装配动作（2）正在装，逐帧识别；完成校验（4）确认到位，驱动状态机；过程留痕每帧判定带时间戳落库，可回溯。</p>
+    </div>
+  </section>
+
+  <!-- 07 结语 -->
+  <section class="outro">
+    <h2>07 · 结语</h2>
+    <p style="color:var(--text); font-size:16px; margin-bottom:16px;"><b>端侧视觉真正的进化，不是从「一个模型」走向「很多模型」，而是从「单次推理」走向「持续维护工序状态」</b>。</p>
+    <ul class="list">
+      <li><b style="color:var(--text)">检测模型（YOLOv26n）</b> 负责识别动作——快、准、稳</li>
+      <li><b style="color:var(--text)">工序时序</b> 负责按序推进——外观→装配→完成校验</li>
+      <li><b style="color:var(--text)">状态维护</b> 负责统一输出——可消费、可追溯的装配状态</li>
+      <li><b style="color:var(--text)">过程留痕</b> 负责交叉验证与时间对齐——输出一致的装配状态</li>
+    </ul>
+    <p style="color:var(--muted); font-size:15px; margin-top:18px;">最值得避免的做法，是把检测框简单堆在一起、让它们以相同频率跑、再等待一堆互不一致的结果。更可靠的架构是：检测模型按高频维护基础状态，工序状态机按节拍推进，所有判定带上时间戳，最后输出一个一致、实时、可检查的装配工序状态。</p>
+    <p style="color:var(--muted); font-size:15px; margin-top:14px;">在装配质检这个领域，真正的挑战不是让一个模型变得更强，而是让多类目标各司其职、协同工作。</p>
+    <div class="golden">从「检出一个动作」，走向「维护一个装配工序状态」</div>
+  </section>
+
+  <footer class="foot">
+    <div class="brand2">凝逸Ai · 装配检查系统 YOLOv26n</div>
+    <p class="spec">参数量约 2.4 M · 端到端无 NMS · CPU 推理提速 43% · 5 类装配动作逐帧识别 · 帧级留痕可追溯</p>
+  </footer>
+
+</div>
+</body>
+</html>
