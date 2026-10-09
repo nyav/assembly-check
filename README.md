@@ -28,4 +28,14 @@
 
 文章页见 [index.html](index.html)（已部署 GitHub Pages）。
 
+## 经验文档
+
+- [L2 Remotion 宣传片模式 · 经验笔记](docs/L2_Remotion宣传片模式_经验笔记.md) —— 程序化生成横/竖宣传片（单一 Promo 组件 + theme.ts 集中配置 + 双 Composition）
+- [ocr-kylin 拆视频取关键帧 · 经验笔记](docs/ocr-kylin_拆视频取关键帧_经验笔记.md) —— 拆帧定位各类动作、抽实机截图并编号配图
+- [Remotion 宣传片 · 从零新建工程步骤清单](docs/Remotion宣传片_从零新建工程_步骤清单.md) —— 从零搭新工程并渲染成片的逐步清单
+
+## 实机运行截图
+
+「外观检查-顶端 / 铜体 / 装白色堵头 / 装配完成」四类实机关键帧见 [images/](images/)（已嵌入文章页）。
+
 © 凝逸Ai · nyav
