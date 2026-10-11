@@ -2,6 +2,8 @@
 
 装配检查的下一站：从「检出一个动作」到「维护一个装配工序状态」
 
+[English README](README.en.md) · [英文文章页](https://nyav.github.io/assembly-check/index.en.html) · [中文文章页](https://nyav.github.io/assembly-check/)
+
 ## 简介
 
 凝逸Ai_装配检查_YOLOv26n 是一套面向工业装配流水线的实时视觉检测方案。基于 **YOLOv26n** 端到端目标检测模型，对装配工位 7×24 在线巡检，自动识别工件外观状态与装配动作，实时判断「白色堵头是否装配到位、说明书是否放入」，将人工目检升级为可追溯的机器判定。
@@ -26,7 +28,8 @@
 
 ## 页面
 
-文章页见 [index.html](index.html)（已部署 GitHub Pages）。
+- 中文文章页 [index.html](index.html)（已部署 GitHub Pages）：https://nyav.github.io/assembly-check/
+- 英文文章页 [index.en.html](index.en.html)（已部署）：https://nyav.github.io/assembly-check/index.en.html
 
 ## 经验文档
 
@@ -37,5 +40,18 @@
 ## 实机运行截图
 
 「外观检查-顶端 / 铜体 / 装白色堵头 / 装配完成」四类实机关键帧见 [images/](images/)（已嵌入文章页）。
+
+## 相关公开材料
+
+- GPU OCR · 国产银河麒麟 V11 + RTX3060 实测（C++ 部署，14 线程 × 100 次 = 1400 张 / 0 失败 / 峰值 302 张每秒）：https://www.bilibili.com/video/BV16EpW6oEdd/
+- 铁路货车车号识别 + 车体表面缺陷检测：8192×2048 线阵小目标召回 98.5%，雨雪逆光 OCR 97%+
+
+## 合作与联系
+
+独立计算机视觉工程师 · 8 年经验 · 20+ 商业项目全程远程交付（UTC+8，距日本 1 小时）。
+
+典型交付形态为独立模块：**1~2 周**从数据到部署，交付 C++ DLL/SO + HTTP 服务，完整私有化部署在你自己服务器上。**发我 50 张样本图，免费返准确率报告 + 演示视频**，零风险评估。
+
+- 邮箱：**ccc7@foxmail.com**　微信：**lxnyai**
 
 © 凝逸Ai · nyav
