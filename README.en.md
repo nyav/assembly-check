@@ -66,16 +66,6 @@ Three engineering notes from this build, each in **English and Chinese**:
 - **GPU OCR on a domestic Chinese OS (Kylin V11 + RTX3060)** — C++ deployment, 14 threads × 100 runs = 1,400 images, 0 failures, peak **302 images/sec**, ~**3 ms/image** average. Benchmark video: <https://www.bilibili.com/video/BV16EpW6oEdd/>
 - **Railway wagon number OCR + body surface defect inspection** — 8192 × 2048 line-scan, **98.5 %** small-object recall, OCR above **97 %** through rain, snow and backlight; in commercial operation across 10+ railway bureau sites.
 
-## Work with me
-
-Independent computer-vision engineer, 8 years, 20+ commercial projects delivered fully remotely (UTC+8 — 1 h from JST, 6 h from CET).
-
-Typical engagement is a self-contained module: **1–2 weeks** from data to deployment, delivered as a C++ DLL/SO plus an HTTP service, running on your own infrastructure. Send **50 sample images** and I will return an accuracy report and a demo video, free of charge.
-
-- Email: **ccc7@foxmail.com**
-- WeChat: **lxnyai**
-- More remote-delivery references available on request.
-
 ---
 
 © 凝逸Ai · nyav
