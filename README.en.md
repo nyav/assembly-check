@@ -53,14 +53,6 @@ Four key frames covering inspect → assemble → confirm:
 
 All images live in [`images/`](images/) and are embedded in the article page. Class 3 (instruction sheet) was not triggered in this recording — it is an optional station, so no frame is attached.
 
-## Engineering notes
-
-Three engineering notes from this build, each in **English and Chinese**:
-
-- **[Remotion promo-clip pattern](docs/remotion-promo-pattern.en.md)** — generating landscape & portrait promo clips programmatically (single `Promo` component + centralised `theme.ts` + dual compositions) · [中文](docs/L2_Remotion宣传片模式_经验笔记.md)
-- **[Extracting key frames from video](docs/keyframe-extraction.en.md)** — locating each action in a recording, extracting on-site stills and captioning them · [中文](docs/ocr-kylin_拆视频取关键帧_经验笔记.md)
-- **[Standing up a Remotion project from scratch](docs/remotion-project-setup-checklist.en.md)** — a step-by-step checklist to stand up a new project and render a finished clip · [中文](docs/Remotion宣传片_从零新建工程_步骤清单.md)
-
 ## Related work
 
 - **GPU OCR on a domestic Chinese OS (Kylin V11 + RTX3060)** — C++ deployment, 14 threads × 100 runs = 1,400 images, 0 failures, peak **302 images/sec**, ~**3 ms/image** average. Benchmark video: <https://www.bilibili.com/video/BV16EpW6oEdd/>
