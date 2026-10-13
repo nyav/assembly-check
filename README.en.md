@@ -53,11 +53,6 @@ Four key frames covering inspect → assemble → confirm:
 
 All images live in [`images/`](images/) and are embedded in the article page. Class 3 (instruction sheet) was not triggered in this recording — it is an optional station, so no frame is attached.
 
-## Related work
-
-- **GPU OCR on a domestic Chinese OS (Kylin V11 + RTX3060)** — C++ deployment, 14 threads × 100 runs = 1,400 images, 0 failures, peak **302 images/sec**, ~**3 ms/image** average. Benchmark video: <https://www.bilibili.com/video/BV16EpW6oEdd/>
-- **Railway wagon number OCR + body surface defect inspection** — 8192 × 2048 line-scan, **98.5 %** small-object recall, OCR above **97 %** through rain, snow and backlight; in commercial operation across 10+ railway bureau sites.
-
 ---
 
 © 凝逸Ai · nyav
