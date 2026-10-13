@@ -55,13 +55,11 @@ All images live in [`images/`](images/) and are embedded in the article page. Cl
 
 ## Engineering notes
 
-The `docs/` folder contains three engineering notes written during this build (Chinese):
+Three engineering notes from this build, each in **English and Chinese**:
 
-- **L2 Remotion promo-pipeline pattern** — generating horizontal & vertical promo clips programmatically (single `Promo` component + centralised `theme.ts` + dual compositions)
-- **Splitting video into key frames (ocr-kylin)** — locating each action, extracting on-site stills and captioning them
-- **Remotion promo — from-scratch project checklist** — step-by-step list to stand up a new project and render a finished clip
-
-English versions of these notes can be provided on request.
+- **[Remotion promo-clip pattern](docs/remotion-promo-pattern.en.md)** — generating landscape & portrait promo clips programmatically (single `Promo` component + centralised `theme.ts` + dual compositions) · [中文](docs/L2_Remotion宣传片模式_经验笔记.md)
+- **[Extracting key frames from video](docs/keyframe-extraction.en.md)** — locating each action in a recording, extracting on-site stills and captioning them · [中文](docs/ocr-kylin_拆视频取关键帧_经验笔记.md)
+- **[Standing up a Remotion project from scratch](docs/remotion-project-setup-checklist.en.md)** — a step-by-step checklist to stand up a new project and render a finished clip · [中文](docs/Remotion宣传片_从零新建工程_步骤清单.md)
 
 ## Related work
 

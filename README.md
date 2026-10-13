@@ -33,9 +33,11 @@
 
 ## 经验文档
 
-- [L2 Remotion 宣传片模式 · 经验笔记](docs/L2_Remotion宣传片模式_经验笔记.md) —— 程序化生成横/竖宣传片（单一 Promo 组件 + theme.ts 集中配置 + 双 Composition）
-- [ocr-kylin 拆视频取关键帧 · 经验笔记](docs/ocr-kylin_拆视频取关键帧_经验笔记.md) —— 拆帧定位各类动作、抽实机截图并编号配图
-- [Remotion 宣传片 · 从零新建工程步骤清单](docs/Remotion宣传片_从零新建工程_步骤清单.md) —— 从零搭新工程并渲染成片的逐步清单
+中英双语，各行末尾为英文版链接：
+
+- [L2 Remotion 宣传片模式 · 经验笔记](docs/L2_Remotion宣传片模式_经验笔记.md) —— 程序化生成横/竖宣传片（单一 Promo 组件 + theme.ts 集中配置 + 双 Composition）· [EN](docs/remotion-promo-pattern.en.md)
+- [ocr-kylin 拆视频取关键帧 · 经验笔记](docs/ocr-kylin_拆视频取关键帧_经验笔记.md) —— 拆帧定位各类动作、抽实机截图并编号配图 · [EN](docs/keyframe-extraction.en.md)
+- [Remotion 宣传片 · 从零新建工程步骤清单](docs/Remotion宣传片_从零新建工程_步骤清单.md) —— 从零搭新工程并渲染成片的逐步清单 · [EN](docs/remotion-project-setup-checklist.en.md)
 
 ## 实机运行截图
 

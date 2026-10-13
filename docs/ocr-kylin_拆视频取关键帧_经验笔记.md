@@ -1,5 +1,7 @@
 # ocr-kylin-v11-Linux64_ctc.so · 拆视频取关键帧 · 经验笔记
 
+> [English version](keyframe-extraction.en.md)
+
 > 来源：`github.com/nyav/ocr-kylin-v11-Linux64_ctc.so`（银河麒麟 V11 + RTX 3060 OCR 实测展示仓库）
 > 做法核心：**拆视频 → 取关键帧 → 挑出各类动作的实机截图 → 编号配图展示**（README 里放 01~05 编号实机截图 + 指标表 + 封面）。
 > 落地示例：从装配检查录屏拆出 4 张实机截图（外观检查-顶端 / 铜体 / 装白色堵头 / 装配完成），嵌入文章页并推入 GitHub 仓库。

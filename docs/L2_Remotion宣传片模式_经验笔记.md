@@ -1,5 +1,7 @@
 # Remotion 宣传片模式 · 经验笔记
 
+> [English version](remotion-promo-pattern.en.md)
+
 > 来源：`<kirin-ocr>`（银河麒麟 V11 + RTX 3060 OCR · 60 秒宣传片，横屏 + 竖屏双版本）
 > 用途：一套「程序化生成宣传片」的可复用模板——改文案、配色、时长只动一个文件，组件内部不用改。
 > 落地示例：装配检查项目已在本地工作目录的 `_remotion\` 下建了一套并渲染出横/竖 48s 成片。
