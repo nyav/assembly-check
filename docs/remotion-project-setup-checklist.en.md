@@ -1,6 +1,6 @@
 # Standing Up a Remotion Promo Project From Scratch · Checklist
 
-> English version · [中文版](Remotion宣传片_从零新建工程_步骤清单.md)
+> English version · [中文版](Remotion宣传片_从零新建工程_步骤清单.md) · local paths genericised (`<…>` = placeholder)
 >
 > Goal: follow the `<kirin-ocr>` template project to build a new project from scratch and render landscape/portrait promo clips.
 > Prerequisites: `<kirin-ocr>`'s `node_modules` is available as a reuse source; you also need ffmpeg and a Python with PIL available.

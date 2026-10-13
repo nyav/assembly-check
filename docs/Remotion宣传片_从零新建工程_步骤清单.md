@@ -1,6 +1,6 @@
 # 从零新建 Remotion 宣传片工程 · 步骤清单
 
-> [English version](remotion-project-setup-checklist.en.md)
+> [English version](remotion-project-setup-checklist.en.md) · 注：本文档中的本机路径已脱敏，`<…>` 为占位符
 
 > 目标：照 `<kirin-ocr>` 这套模板工程，从零搭一个新项目并渲染横/竖宣传片。
 > 前置：`<kirin-ocr>` 的 node_modules 可作复用源；本机有 ffmpeg 与带 PIL 的 python。

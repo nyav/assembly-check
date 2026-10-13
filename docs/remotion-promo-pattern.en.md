@@ -1,6 +1,6 @@
 # Remotion Promo-Clip Pattern · Engineering Notes
 
-> English version · [中文版](L2_Remotion宣传片模式_经验笔记.md)
+> English version · [中文版](L2_Remotion宣传片模式_经验笔记.md) · local paths genericised (`<…>` = placeholder)
 >
 > Source: `<kirin-ocr>` (Kylin V11 + RTX 3060 OCR, a 60-second promo, landscape + portrait).
 > Purpose: a reusable template for **programmatically generated promo clips** — copy, colour scheme and duration are changed in a single file; the components themselves stay untouched.

@@ -1,6 +1,6 @@
 # ocr-kylin-v11-Linux64_ctc.so · Extracting Key Frames from Video · Engineering Notes
 
-> English version · [中文版](ocr-kylin_拆视频取关键帧_经验笔记.md)
+> English version · [中文版](ocr-kylin_拆视频取关键帧_经验笔记.md) · local paths genericised (`<…>` = placeholder)
 >
 > Source: `github.com/nyav/ocr-kylin-v11-Linux64_ctc.so` (the Kylin V11 + RTX 3060 OCR benchmark repository).
 > Core idea: **split the video → pull key frames → pick the on-site screenshot for each action → number and caption them** (the README carries numbered 01–05 on-site frames, a metrics table and a cover).
@@ -80,7 +80,7 @@ After extraction, read each file to confirm the red overlay really is the intend
 
 | Purpose | Command / path |
 |---|---|
-| ffmpeg | `ffmpeg`（任意较新版本） |
+| ffmpeg | `ffmpeg` (any recent build) |
 | Split frames | `ffmpeg -i <v> -vf "fps=1" f_%03d.jpg` |
 | Extract one frame | `ffmpeg -ss <seconds> -i <v> -frames:v 1 out.jpg` |
 | Build a contact sheet | Python + PIL (use `<python-with-PIL>\python.exe`; the default `python` has no PIL) |
